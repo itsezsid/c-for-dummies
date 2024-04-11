@@ -10,16 +10,17 @@
 7. [Error Handling](#error-handling)
 8. [Common Libraries](#common-libraries)
 9. [Sorting Algorithms](#sorting-algorithms)
-10. [Memory Management](#memory-management)
-11. [File Operations](#file-operations)
-12. [String Manipulations](#string-manipulations)
-13. [Pointers and Arrays](#pointers-and-arrays)
-14. [Debugging and Error Handling](#debugging-and-error-handling)
-15. [Best Practices](#best-practices)
-16. [Code Styling](#code-styling)
-17. [Compiling and Building](#compiling-and-building)
-18. [Concurrency](#concurrency)
-19. [Additional Notes](#additional-notes)
+10. [Linked Lists](#linked-lists)
+11. [Memory Management](#memory-management)
+12. [File Operations](#file-operations)
+13. [String Manipulations](#string-manipulations)
+14. [Pointers and Arrays](#pointers-and-arrays)
+15. [Debugging and Error Handling](#debugging-and-error-handling)
+16. [Best Practices](#best-practices)
+17. [Code Styling](#code-styling)
+18. [Compiling and Building](#compiling-and-building)
+19. [Concurrency](#concurrency)
+20. [Additional Notes](#additional-notes)
 
 ## 1. Basic Syntax <a name="basic-syntax"></a>
 - **Variables and Types**
@@ -132,8 +133,80 @@
     }
   }
   ```
+## 10. Linked Lists <a name="linked-lists"></a>
+- **Definition**
+  ```c
+  struct Node {
+    int data;
+    struct Node* next;
+  };
+  ```
 
-## 10. Memory Management <a name="memory-management"></a>
+- **Creating a Node**
+  ```c
+  struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+  }
+  ```
+
+- **Inserting a Node**
+  ```c
+  void insertNode(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+  }
+  ```
+
+- **Deleting a Node**
+  ```c
+  void deleteNode(struct Node** head, int key) {
+    struct Node* temp = *head, *prev;
+    if (temp != NULL && temp->data == key) {
+        *head = temp->next;
+        free(temp);
+        return;
+    }
+    while (temp != NULL && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (temp == NULL) return;
+    prev->next = temp->next;
+    free(temp);
+  }
+  ```
+
+- **Traversing a Linked List**
+  ```c
+  void printList(struct Node* node) {
+    while (node != NULL) {
+        printf(" %d ", node->data);
+        node = node->next;
+    }
+  }
+  ```
+
+- **Reversing a Linked List**
+  ```c
+  struct Node* reverse(struct Node* head) {
+    struct Node* prev = NULL;
+    struct Node* current = head;
+    struct Node* next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
+    return head;
+  }
+  ```
+## 11. Memory Management <a name="memory-management"></a>
 - **Dynamic Allocation**
   ```c
   int* ptr = malloc(sizeof(int) * n); // Allocate memory
@@ -147,7 +220,7 @@
   memcpy(dest, src, n); // Copies n bytes from src to dest
   ```
 
-## 11. File Operations <a name="file-operations"></a>
+## 12. File Operations <a name="file-operations"></a>
 - **Reading and Writing Files**
   ```c
   FILE *fp = fopen("file.txt", "r"); // Open for reading
@@ -162,7 +235,7 @@
   fclose(fp); // Close file
   ```
 
-## 12. String Manipulations <a name="string-manipulations"></a>
+## 13. String Manipulations <a name="string-manipulations"></a>
 - **Common Functions**
   ```c
   size_t len = strlen(s); // Get string length
@@ -171,7 +244,7 @@
   int cmp = strcmp(s1, s2); // Compare strings
   ```
 
-## 13. Pointers and Arrays <a name="pointers-and-arrays"></a>
+## 14. Pointers and Arrays <a name="pointers-and-arrays"></a>
 - **Usage**
   ```c
   int arr[10]; // Declare an array
@@ -179,7 +252,7 @@
   p[2] = 5; // Set 3rd element of the array to 5
   ```
 
-## 14. Debugging and Error Handling <a name="debugging-and-error-handling"></a>
+## 15. Debugging and Error Handling <a name="debugging-and-error-handling"></a>
 - **Check Return Values**
   ```c
   if (fopen("file.txt", "r") == NULL) { /* handle file open error */ }
@@ -191,27 +264,27 @@
   assert(ptr != NULL); // Assert that ptr is not NULL
   ```
 
-## 15. Best Practices <a name="best-practices"></a>
+## 16. Best Practices <a name="best-practices"></a>
 - **Avoid Memory Leaks:** Always `free` allocated memory and set the pointer to NULL.
 - **Buffer Overflows:** Prefer `strncpy` over `strcpy` to avoid buffer overflow.
 - **Use `const` Keyword:** For non-modifiable parameters and variables.
 - **Modular Programming:** Use functions and split code across multiple files for better organization.
 - **Comments:** Document the "why", not the "what". Use comments to explain complex code sections.
 
-## 16. Code Styling <a name="code-styling"></a>
+## 17. Code Styling <a name="code-styling"></a>
 - Be consistent with naming conventions (snake_case, camelCase).
 - Use consistent indentation (e.g., 4 spaces) and spacing.
 - Choose a consistent style for curly braces.
 
-## 17. Compiling and Building <a name="compiling-and-building"></a>
+## 18. Compiling and Building <a name="compiling-and-building"></a>
 - **Compiler Warnings:** Use `-Wall` to enable all compiler warnings.
 - **Makefiles:** Use for managing larger projects.
 
-## 18. Concurrency <a name="concurrency"></a>
+## 19. Concurrency <a name="concurrency"></a>
 - **Thread Safety:** Use mutexes for protecting shared resources.
 - **Atomic Operations:** Use for certain operations on shared variables to prevent race conditions.
 
-## 19. Additional Notes <a name="additional-notes"></a>
+## 20. Additional Notes <a name="additional-notes"></a>
 - **Error Handling:** Always validate the return values from library functions for potential errors.
 - **Dynamic Memory:** Check for `NULL` from `malloc` indicating allocation failure.
 - **File Operations:** Ensure `fclose` is called after finishing operations on a file to avoid resource leaks.
